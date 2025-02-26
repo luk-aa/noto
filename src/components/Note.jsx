@@ -55,7 +55,7 @@ const Note = ({ title, text, tags, id, color }) => {
 
   return (
     <div
-      className="fixed inset-0 flex items-center justify-center bg-[#202124] bg-opacity-60 overflow-hidden z-50"
+      className="fixed px-2 inset-0 flex items-center justify-center bg-[#202124] bg-opacity-60 overflow-hidden z-50"
       onClick={handleSubmit}
     >
       <div
@@ -80,8 +80,8 @@ const Note = ({ title, text, tags, id, color }) => {
               className={` cursor-pointer`}
             >
               {!isTagInputVisible
-                ? <MdOutlineNewLabel className="text-2xl" onClick={() => setIsTagInputVisible(true)} />
-                : <MdNewLabel className={`text-2xl ${isTagInputVisible ? 'opacity-100' : 'opacity-0'} duration-200`} onClick={() => setIsTagInputVisible(false)} />}
+                ? <MdOutlineNewLabel className="text-3xl" onClick={() => setIsTagInputVisible(true)} />
+                : <MdNewLabel className={`text-3xl ${isTagInputVisible ? 'opacity-100' : 'opacity-0'} duration-200`} onClick={() => setIsTagInputVisible(false)} />}
 
             </div>
           </div>
@@ -103,7 +103,10 @@ const Note = ({ title, text, tags, id, color }) => {
 
           <textarea
             name="text"
-            className="custom-scrollbar w-full h-full pb-10 bg-transparent resize-none p-2 text-black focus:outline-none scrollbar-thin scrollbar-thumb-gray-300 placeholder:text-black"
+            className="custom-scrollbar w-full h-full pb-10 bg-transparent 
+            resize-none p-2 text-black focus:outline-none 
+            scrollbar-thin scrollbar-thumb-gray-300
+             placeholder:text-black"
             value={note.text}
             onChange={handleTextChange}
             placeholder="Write your note here..."

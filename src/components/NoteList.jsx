@@ -32,49 +32,55 @@ const NoteList = () => {
   // Determine the final displayed notes based on filters
   const displayedNotes = searchFilter ? filteredNotesBySearch : filteredNotesByTag;
 
+  function handleOnMouseLeave() {
+    setIsMenuVisible(null)
+    closePalette()
+  }
 
   // Map through displayed notes and generate note components
   const notesMap = displayedNotes.map((note) => (
     <div key={note.id}>
       <div
-        className={`box-shadow-list relative mb-4 px-4 py-3 w-full min-h-[100px] flex flex-col justify-between border-[1px] border-gray-300
+        className={`box-shadow-list relative mb-4 px-4 py-3 w-full sm:min-h-[100px] flex flex-col justify-between border-[1px] border-gray-300
         rounded-2xl break-inside-avoid break-words cursor-default duration-100
         ${note.isOpen && "opacity-0"}`}
         style={{ whiteSpace: "pre-line", backgroundColor: note.color }}
         onClick={() => openNote(note.id)} // Open note on click
         onMouseEnter={() => setIsMenuVisible(note.id)} // Show menu on hover
-        onMouseLeave={() => setIsMenuVisible(null)} // Hide menu when mouse leaves
+        onMouseLeave={() => handleOnMouseLeave()} // Hide menu when mouse leaves
       >
         {!note.title.trim() && !note.text.trim() && <h2>Note is empty</h2>}
-        <h1 className={`text-[#202124] font-semibold mb-3 ${note.title.trim() ? "block" : "hidden"}`}>
+        <h1 className={`text-[#202124] font-semibold sm:mb-3 ${note.title.trim() ? "block" : "hidden"}`}>
           {highlightText(note.title, searchFilter)} {/* Highlight search text in title */}
         </h1>
         <p className="text-sm text-[#202124] tracking-[.014em] font-normal leading-5">
           {highlightText(note.text.slice(0, 300), searchFilter)} {/* Highlight search text in body */}
           {note.text.length > 300 ? "..." : ""}
         </p>
-        <div className="flex flex-wrap gap-2 mt-5">
-          {note.tags.map((tag, index) => (
-            <h2 key={index} className="px-3 py-1 text-xs font-semibold text-[#3c4043] bg-[#3c404320] rounded-full">
-              {tag.value.length > 12
-                ? tag.value.slice(0, 23) + "..."
-                : tag.value}
-            </h2>
-          ))}
-        </div>
-        <div className={`mt-2 flex justify-between items-center duration-300 ease-in ${isMenuVisible === note.id ? "opacity-100" : "opacity-0"}`}>
-          <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
-            <div
-              className="p-2 text-[#3c4043] hover:bg-[#3c404320] rounded-full cursor-pointer"
-              onClick={() => deleteNote(note.id)} // Delete note on click
-            >
-              <RiDeleteBinLine className="text-md " />
-            </div>
+        {note.tags.length > 0 &&
+          <div className="flex flex-wrap gap-2 mt-2 sm:mt-5">
+            {note.tags.map((tag, index) => (
+              <h2 key={index} className="px-3 py-1 text-xs font-semibold text-[#3c4043] bg-[#3c404320] rounded-full">
+                {tag.value.length > 12
+                  ? tag.value.slice(0, 23) + "..."
+                  : tag.value}
+              </h2>
+            ))}
+          </div>
+        }
+        <div className={`hidden mt-2 sm:flex justify-between items-center duration-300 ease-in ${isMenuVisible === note.id ? "opacity-100" : "opacity-0"}`}>
+          <div className="w-full flex justify-between gap-2" onClick={(e) => e.stopPropagation()}>
             <div
               onClick={() => showPalette(note.id)}
               className="p-2 text-[#3c4043] hover:bg-[#3c404320] rounded-full cursor-pointer"
             >
               <LuPalette className="text-md " />
+            </div>
+            <div
+              className="p-2 text-[#3c4043] hover:bg-[#3c404320] rounded-full cursor-pointer"
+              onClick={() => deleteNote(note.id)} // Delete note on click
+            >
+              <RiDeleteBinLine className="text-md " />
             </div>
           </div>
         </div>

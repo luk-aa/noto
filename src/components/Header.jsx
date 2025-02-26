@@ -56,7 +56,7 @@ const Header = () => {
         />
       </div>
       <div
-        className="hover:bg-gray-200 p-3 rounded-full cursor-pointer"
+        className="hidden sm:block hover:bg-gray-200 p-3 rounded-full cursor-pointer"
         onClick={() => setGridView(!gridView)}
       >
         {gridView ? <CiGrid2H className="text-2xl text-black" /> : <CiGrid41 className="text-2xl text-black" />}

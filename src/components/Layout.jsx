@@ -22,7 +22,7 @@ export default function Layout() {
       <Header />
       <SideMenu />
       <main
-        className="mt-24 mb-4 pr-4 pl-[88px] flex items-center flex-col gap-5"
+        className="pt-12 sm:pt-24 mb-4 pr-4 pl-[88px] flex items-center flex-col gap-5"
       >
         <TakeNote />
         <NoteList />
