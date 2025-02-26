@@ -118,7 +118,7 @@ export const initialNote = [
 export const customStyles = {
   control: (baseStyles) => ({
     ...baseStyles,
-    fontSize: "14px",
+    fontSize: "16px",
     color: "black",
     backgroundColor: "transparent",
     height: "100%",

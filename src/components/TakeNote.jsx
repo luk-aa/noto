@@ -147,7 +147,7 @@ const TakeNote = () => {
                 value={selectedOption}
                 onChange={handleTagChange}
                 onBlur={handleBlur}
-                className="w-fit min-w-[300px]"
+                className="w-fit min-w-[300px] ml-1 sm:ml-0"
                 styles={customStyles}
                 placeholder="Tags..."
                 options={options}
@@ -161,7 +161,7 @@ const TakeNote = () => {
         <textarea
           name="text"
           ref={textAreaRef} // Reference to dynamically adjust height
-          className={`w-full py-3 px-4 sm:px-2 rounded-lg outline-none 
+          className={`w-full py-3 px-3 sm:px-2 rounded-lg outline-none 
           bg-transparent placeholder-black ${takeNoteIsOpen ? "sm:text-sm" : "text-base font-medium"}`}
           placeholder="Collect your thoughts..."
           value={singleNote.text}
