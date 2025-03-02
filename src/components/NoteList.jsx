@@ -50,7 +50,7 @@ const NoteList = () => {
         onMouseLeave={() => handleOnMouseLeave()} // Hide menu when mouse leaves
       >
         {!note.title.trim() && !note.text.trim() && <h2>Note is empty</h2>}
-        <h1 className={`text-[#202124] font-semibold sm:mb-3 ${note.title.trim() ? "block" : "hidden"}`}>
+        <h1 className={`text-[#202124] font-semibold ${note.title.trim() ? "block" : "hidden"}`}>
           {highlightText(note.title, searchFilter)} {/* Highlight search text in title */}
         </h1>
         <p className="text-sm text-[#202124] tracking-[.014em] font-normal leading-5">

@@ -56,7 +56,7 @@ const TakeNote = () => {
   useEffect(() => {
     if (textAreaRef.current) {
       textAreaRef.current.style.height = "auto";  // Reset height
-      textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight}px`;  // Set new height based on content
+      if (textAreaRef.current.scrollHeight !== 0) textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight}px`;  // Set new height based on content
     }
   }, [singleNote.text]); // Only re-run when the text content changes
 
@@ -108,14 +108,15 @@ const TakeNote = () => {
 
   return (
     <div
-      className={` ${takeNoteIsOpen ? 'fixed sm:static z-50 bg-[#202124] sm:bg-transparent bg-opacity-60' : 'block'}
+      className={` ${takeNoteIsOpen ? 'fixed sm:static p-2 z-50 sm:z-40 bg-[#202124] sm:bg-transparent bg-opacity-60' : 'block'}
        w-full inset-0 flex items-center justify-center`}
       onClick={() => closeTakeNote()}
     >
       <form
         onSubmit={saveNote}
-        className={` sm:block box-shadow relative max-w-[600px] ${takeNoteIsOpen ? 'block p-4 sm:p-2 max-h-[500px] h-full sm:h-12 sm:min-h-[200px]' : 'hidden sm:block sm:h-12'} 
-      w-full px-2 pb-10 border rounded-lg `}
+        className={` sm:block box-shadow relative max-w-[600px] w-full overflow-hidden
+          ${takeNoteIsOpen ? 'block p-4 sm:pb-16 sm:p-2  sm:max-h-full h-full sm:min-h-[200px]' : 'hidden px-2 sm:block sm:h-12'}
+           border rounded-lg `}
         style={{ backgroundColor: color }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -160,20 +161,23 @@ const TakeNote = () => {
         {/* Textarea for Note Text */}
         <textarea
           name="text"
-          ref={textAreaRef} // Reference to dynamically adjust height
-          className={`w-full py-3 px-3 sm:px-2 rounded-lg outline-none 
-          bg-transparent placeholder-black ${takeNoteIsOpen ? "sm:text-sm" : "text-base font-medium"}`}
+          ref={textAreaRef}
+          className={`custom-scrollbar scrollbar-thin scrollbar-thumb-gray-300 
+            w-full pt-3 pb-3 max-h-[340px] px-3 sm:px-2 
+            rounded-lg outline-none resize-none
+          bg-transparent placeholder-black 
+          ${takeNoteIsOpen ? "sm:text-sm" : "text-base font-medium overflow-hidden"}`}
           placeholder="Collect your thoughts..."
           value={singleNote.text}
           onChange={textChange}
-          rows="1" // Starts with one row
-          style={{ resize: "none", overflow: "hidden", height: '100%' }} // Prevent resizing, auto-adjust height
+          rows="1"
           onClick={() => openTakeNote()}
         />
 
         {/* Show Save Button and Color Picker only if form is open */}
         {takeNoteIsOpen && (
-          <div className="absolute bottom-0 left-2 right-2 flex justify-between items-center py-3 px-2 gap-2">
+          <div className="absolute bottom-0 left-2 right-2 flex justify-between 
+          items-center py-3 px-2 gap-2">
             <NoteColor color={color} setColor={setColor} />
 
             {/* Save Button */}
