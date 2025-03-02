@@ -127,9 +127,9 @@ const Note = ({ title, text, tags, id, color }) => {
                 <RiDeleteBinLine className="text-lg" />
               </div>
             </div>
-            <div className="cursor-pointer p-3" onClick={handleSubmit}>
+            {/* <div className="cursor-pointer p-3" onClick={handleSubmit}>
               Close
-            </div>
+            </div> */}
           </div>
         </form>
       </div>
