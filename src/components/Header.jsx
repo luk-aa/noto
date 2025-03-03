@@ -35,7 +35,7 @@ const Header = () => {
   }, [searchValue, navigate]);
 
   return (
-    <header className=" w-full fixed z-50 top-0 right-0 left-0 h-16 pl-24 pr-5 py-2 bg-white flex items-center justify-betwee gap-5">
+    <header className=" w-full fixed z-50 top-0 right-0 left-0 h-16 pl-[80px] ms:pl-24 pr-2 sm:pr-5 py-2 bg-white flex items-center justify-betwee gap-2 sm:gap-5">
       {/* <MdCircle className="text-3xl text-yellow-500" /> */}
       <h2 className="sm:block hidden font-medium text-lg min-w-44 text-black">
         {tagValue
@@ -46,7 +46,7 @@ const Header = () => {
           : 'QUICK THOUGHTS'}
       </h2>
       <div className=" px-5 flex items-center gap-5 bg-[#f1f3f4] rounded-lg w-full h-full">
-        <IoMdSearch className="text-2xl text-gray-500" />
+        <IoMdSearch className="text-3xl sm:text-2xl text-gray-500" />
         <input
           type="text"
           value={searchValue}
@@ -56,10 +56,10 @@ const Header = () => {
         />
       </div>
       <div
-        className="hidden sm:block hover:bg-gray-200 p-3 rounded-full cursor-pointer"
+        className=" absolute sm:static right-5 sm:hover:bg-gray-200 sm:p-3 rounded-full cursor-pointer"
         onClick={() => setGridView(!gridView)}
       >
-        {gridView ? <CiGrid2H className="text-2xl text-black" /> : <CiGrid41 className="text-2xl text-black" />}
+        {gridView ? <CiGrid2H className="text-3xl text-gray-500 sm:text-black" /> : <CiGrid41 className="text-3xl text-gray-500 sm:text-black" />}
       </div>
     </header>
   );

@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
 import CreatableSelect from "react-select/creatable";
 import { RiDeleteBinLine } from "react-icons/ri";
-import { customStyles } from "../data/data";
+import { customStyles } from "../utils/data";
 import { useNotes } from "../context/GlobalContext";
 import NoteColor from "./NoteColor";
 import { MdNewLabel, MdOutlineNewLabel } from "react-icons/md";
+import { IoArrowBackOutline } from "react-icons/io5";
+import { LuPalette } from "react-icons/lu";
 
 const Note = ({ title, text, tags, id, color }) => {
   const { setNotes, closeNote, deleteNote, options, changeNoteColor } = useNotes();
@@ -13,6 +15,8 @@ const Note = ({ title, text, tags, id, color }) => {
   const [note, setNote] = useState({ title, text });
   const [selectedOption, setSelectedOption] = useState(tags);
   const tagInputRef = useRef(null);
+
+  const [paletteIsOpen, setPaletteIsOpen] = useState(false)
 
   useEffect(() => {
     if (isTagInputVisible && tagInputRef.current) {
@@ -59,13 +63,14 @@ const Note = ({ title, text, tags, id, color }) => {
       onClick={handleSubmit}
     >
       <div
-        className="max-w-[600px] w-full max-h-[500px] h-full relative z-50 rounded-lg overflow-hidden"
+        className="max-w-[600px] w-full max-h-[500px] h-full relative z-50 rounded-lg"
         onClick={(e) => e.stopPropagation()}
       >
         <form
-          className="relative h-full flex flex-col p-4"
+          className="relative h-full flex flex-col p-4 rounded-lg"
           style={{ backgroundColor: color }}
           onSubmit={handleSubmit}
+          onClick={() => setPaletteIsOpen(false)}
         >
           <div className="flex items-center gap-2">
             <input
@@ -113,26 +118,45 @@ const Note = ({ title, text, tags, id, color }) => {
           ></textarea>
 
           <div className="mt-4 flex justify-between items-center rounded-md">
+            <div className="sm:hidden flex items-center gap-8">
+              <button>
+                <IoArrowBackOutline className='text-3xl' />
+              </button>
+              <div onClick={(e) => {
+                e.stopPropagation()
+                setPaletteIsOpen(!paletteIsOpen)
+              }}>
+                <LuPalette className="text-3xl" />
+              </div>
+            </div>
+
             <div
+              className="hidden sm:block"
               onClick={(e) => e.stopPropagation()}
               style={{ backgroundColor: note.color }}
             >
               <NoteColor color={color} setColor={(newColor) => changeNoteColor(id, newColor)} />
             </div>
-            <div className="flex gap-2 opacity-70">
+            <div className="flex gap-2 sm:opacity-70">
               <div
                 onClick={() => deleteNote(id)}
                 className="p-3 m-1 hover:bg-gray-200 hover:bg-opacity-60 rounded-full cursor-pointer"
               >
-                <RiDeleteBinLine className="text-lg" />
+                <RiDeleteBinLine className="text-3xl sm:text-lg" />
               </div>
             </div>
-            {/* <div className="cursor-pointer p-3" onClick={handleSubmit}>
-              Close
-            </div> */}
           </div>
         </form>
       </div>
+      <div
+        className={`sm:hidden box-shadow absolute bottom-0 left-0 z-50 px-2 py-4 w-full  rounded-t-3xl bg-white
+              ${paletteIsOpen ? 'translate-y-0' : 'translate-y-full'} duration-200`}
+        onClick={(e) => e.stopPropagation()}
+        style={{ backgroundColor: color }}
+      >
+        <NoteColor color={color} setColor={(newColor) => changeNoteColor(id, newColor)} circleSize={'48px'} />
+      </div>
+
     </div>
   );
 };

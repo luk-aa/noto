@@ -41,7 +41,7 @@ const NoteList = () => {
   const notesMap = displayedNotes.map((note) => (
     <div key={note.id}>
       <div
-        className={`box-shadow-list relative mb-4 px-4 py-3 w-full sm:min-h-[100px] flex flex-col justify-between border-[1px] border-gray-300
+        className={`box-shadow-list relative mb-2 sm:mb-4 px-4 py-3 w-full sm:min-h-[100px] flex flex-col justify-between border-[1px] border-gray-300
         rounded-2xl break-inside-avoid break-words cursor-default duration-100
         ${note.isOpen && "opacity-0"}`}
         style={{ whiteSpace: "pre-line", backgroundColor: note.color }}
@@ -89,7 +89,7 @@ const NoteList = () => {
             className="bg-gray- box-shadow absolute -bottom-20 left-1/2 -translate-x-1/2 border rounded-lg w-[300px] p-2 z-50"
             style={{ backgroundColor: note.color }}
           >
-            <NoteColor color={note.color} setColor={(newColor) => changeNoteColor(note.id, newColor)} />
+            <NoteColor color={note.color} setColor={(newColor) => changeNoteColor(note.id, newColor)} circleSize={'32px'} />
           </div>
         )}
       </div>
@@ -120,7 +120,7 @@ const NoteList = () => {
       {/* Display notes in a grid or list format based on gridView */}
       <div
         // onClick={closePalette}
-        className={` ${gridView ? 'sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5 2xl:columns-6' : 'columns-1'} mx-auto`}
+        className={` ${gridView ? 'columns-2 md:columns-3 lg:columns-4 xl:columns-5 2xl:columns-6' : 'columns-1'} gap-2 sm:gap-4 mx-auto`}
       >
         {notesMap}
       </div>

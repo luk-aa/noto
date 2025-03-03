@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from 'react'
-import { initialNote } from '../data/data'
+import { initialNote } from '../utils/data'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 
 const NoteContext = createContext({})

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { nanoid } from "nanoid";
 import CreatableSelect from "react-select/creatable";
-import { customStyles } from "../data/data";
+import { customStyles } from "../utils/data";
 import NoteColor from "./NoteColor";
 import { useNotes } from "../context/GlobalContext";
 import { MdOutlineNewLabel } from "react-icons/md";
@@ -9,6 +9,10 @@ import { MdNewLabel } from "react-icons/md";
 import { IoIosAddCircle } from "react-icons/io";
 import { FaSquarePlus } from "react-icons/fa6";
 import { BsPlusSquareFill } from "react-icons/bs";
+import { LuPalette } from "react-icons/lu";
+import { IoArrowBackOutline } from "react-icons/io5";
+import { CiSaveDown2 } from "react-icons/ci";
+import { HiOutlineSave } from "react-icons/hi";
 
 
 const TakeNote = () => {
@@ -32,6 +36,7 @@ const TakeNote = () => {
 
   // Local state to store the selected color for the note
   const [color, setColor] = useState('#FFFFFF');
+  const [paletteIsOpen, setPaletteIsOpen] = useState(false)
 
   // Creating a reference for the textarea to dynamically adjust height
   const textAreaRef = useRef(null);
@@ -108,7 +113,7 @@ const TakeNote = () => {
 
   return (
     <div
-      className={` ${takeNoteIsOpen ? 'fixed sm:static p-2 z-50 sm:z-40 bg-[#202124] sm:bg-transparent bg-opacity-60' : 'block'}
+      className={` ${takeNoteIsOpen ? 'fixed sm:static z-50 sm:z-40 bg-[#202124] sm:bg-transparent bg-opacity-60' : 'block'}
        w-full inset-0 flex items-center justify-center`}
       onClick={() => closeTakeNote()}
     >
@@ -116,7 +121,7 @@ const TakeNote = () => {
         onSubmit={saveNote}
         className={` sm:block box-shadow relative max-w-[600px] w-full overflow-hidden
           ${takeNoteIsOpen ? 'block p-4 sm:pb-16 sm:p-2  sm:max-h-full h-full sm:min-h-[200px]' : 'hidden px-2 sm:block sm:h-12'}
-           border rounded-lg `}
+           border sm:rounded-lg `}
         style={{ backgroundColor: color }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -173,22 +178,46 @@ const TakeNote = () => {
           rows="1"
           onClick={() => openTakeNote()}
         />
+        <div
+          className={`sm:hidden absolute inset-0 z-40 bg-[#3c404380] ${paletteIsOpen ? 'block' : 'hidden'} `}
+          onClick={() => setPaletteIsOpen(false)}
+        >
+        </div>
+        <div
+          className={`sm:hidden box-shadow absolute bottom-0 left-0 z-50 px-2 py-4 w-full  rounded-t-3xl bg-white
+              ${paletteIsOpen ? 'translate-y-0' : 'translate-y-full'} duration-200`}
+          onClick={(e) => e.stopPropagation()}
+          style={{ backgroundColor: color }}
+        >
+          <NoteColor color={color} setColor={setColor} circleSize={'48px'} />
+        </div>
 
         {/* Show Save Button and Color Picker only if form is open */}
         {takeNoteIsOpen && (
           <div className="absolute bottom-0 left-2 right-2 flex justify-between 
-          items-center py-3 px-2 gap-2">
-            <NoteColor color={color} setColor={setColor} />
+          items-center py-5 sm:py-3  px-3 gap-2">
+            <div className="sm:hidden flex items-center gap-8">
+              <div onClick={closeTakeNote}>
+                <IoArrowBackOutline className='text-3xl' />
+              </div>
+              <div onClick={(e) => {
+                e.stopPropagation()
+                setPaletteIsOpen(!paletteIsOpen)
+              }}>
+                <LuPalette className="text-3xl" />
+              </div>
+            </div>
+            <div className="hidden sm:block">
+              <NoteColor color={color} setColor={setColor} circleSize={'32px'} />
+            </div>
 
             {/* Save Button */}
             <button
               type="submit"
               disabled={!(singleNote.title.trim() || singleNote.text.trim())} // Disable button if both title and text are empty
-              className={`bg-blue-500 text-white px-4 py-2 
-            rounded-md transition cursor-default
-            ${(singleNote?.title?.trim() || singleNote?.text?.trim()) ? 'opacity-70 hover:bg-blue-600' : 'opacity-20'}`}
+              className={`${(singleNote?.title?.trim() || singleNote?.text?.trim()) ? 'opacity-100 cursor-pointer' : 'opacity-20'}`}
             >
-              Save
+              <HiOutlineSave className='text-3xl sm:text-2xl' />
             </button>
           </div>
         )}

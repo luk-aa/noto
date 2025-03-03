@@ -27,53 +27,62 @@ const SideMenu = () => {
   };
 
   return (
-    <div
-      className={`custom-scrollbar px-3 py-2 pb-10 bg-white border fixed bottom-0 top-0 z-50 overflow-hidden
-      ${isOpen ? "w-60 shadow-2xl overflow-y-auto" : "w-[72px]"} duration-300`}
-      onMouseEnter={() => setIsOpen(true)} // Show side menu on mouse enter
-      onMouseLeave={() => setIsOpen(false)} // Hide side menu on mouse leave
-    >
-      <ul className="flex flex-col justify-center items-start gap-2">
-        <li className="flex my-2 justify-center w-full">
-          <MdCircle className="text-3xl text-[#FF7900]" />
-        </li>
-
-        {/* "Notes" button */}
-        <li
-          className={`p-3 rounded-xl cursor-default ${!tagValue ? "bg-[#80CEE1] text-white" : "hover:bg-slate-200"} 
-            ${isOpen ? "w-full" : "w-12"} cursor-pointer overflow-hidden duration-300`}
-          onClick={() => handleTagClick(null)} // Clears tag filter
+    <>
+      {isOpen &&
+        <div
+          className="absolute inset-0 z-50"
+          onClick={() => setIsOpen(false)}
         >
-          <div className="flex items-center gap-8">
-            <div>
-              <PiNotepad className="text-2xl" />
-            </div>
-            <p className={`text-sm font-medium ${isOpen ? "block" : "hidden"}`}>
-              Notes
-            </p>
-          </div>
-        </li>
+        </div>
+      }
+      <div
+        className={`custom-scrollbar px-3 py-2 pb-10 bg-white border fixed bottom-0 top-0 z-50 overflow-hidden
+        ${isOpen ? "w-60 shadow-2xl overflow-y-auto" : "w-[72px]"} duration-300`}
+        onMouseEnter={() => setIsOpen(true)} // Show side menu on mouse enter
+        onMouseLeave={() => setIsOpen(false)} // Hide side menu on mouse leave
+      >
+        <ul className="flex flex-col justify-center items-start gap-2">
+          <li className="flex my-2 justify-center w-full">
+            <MdCircle className="text-3xl text-[#FF7900]" />
+          </li>
 
-        {/* Render tags */}
-        {uniqueTags.map((tag) => (
+          {/* "Notes" button */}
           <li
-            key={tag}
-            className={`p-3 cursor-default rounded-xl ${tagValue === tag ? "bg-[#80CEE1] text-white" : "hover:bg-slate-200"} 
-              ${isOpen ? "w-full" : "w-12"} cursor-pointer overflow-hidden duration-300`}
-            onClick={() => handleTagClick(tag)} // Filters notes by tag
+            className={`p-3 rounded-xl cursor-default ${!tagValue ? "bg-[#80CEE1] text-white" : "hover:bg-slate-200"} 
+            ${isOpen ? "w-full" : "w-12"} cursor-pointer overflow-hidden duration-300`}
+            onClick={() => handleTagClick(null)} // Clears tag filter
           >
             <div className="flex items-center gap-8">
               <div>
-                <PiTagSimple className="text-2xl" />
+                <PiNotepad className="text-2xl" />
               </div>
-              <p className={`text-sm font-medium whitespace-nowrap ${isOpen ? "block" : "hidden"}`}>
-                {tag.charAt(0).toUpperCase() + tag.slice(1)} {/* Capitalize tag */}
+              <p className={`text-sm font-medium ${isOpen ? "block" : "hidden"}`}>
+                Notes
               </p>
             </div>
           </li>
-        ))}
-      </ul>
-    </div>
+
+          {/* Render tags */}
+          {uniqueTags.map((tag) => (
+            <li
+              key={tag}
+              className={`p-3 cursor-default rounded-xl ${tagValue === tag ? "bg-[#80CEE1] text-white" : "hover:bg-slate-200"} 
+              ${isOpen ? "w-full" : "w-12"} cursor-pointer overflow-hidden duration-300`}
+              onClick={() => handleTagClick(tag)} // Filters notes by tag
+            >
+              <div className="flex items-center gap-8">
+                <div>
+                  <PiTagSimple className="text-2xl" />
+                </div>
+                <p className={`text-sm font-medium whitespace-nowrap ${isOpen ? "block" : "hidden"}`}>
+                  {tag.charAt(0).toUpperCase() + tag.slice(1)} {/* Capitalize tag */}
+                </p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </>
   );
 };
 
