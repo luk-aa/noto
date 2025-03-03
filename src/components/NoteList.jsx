@@ -127,7 +127,7 @@ const NoteList = () => {
 
       {/* If there are no notes at all */}
       {notes.length === 0 && (
-        <div className="mt-16 flex flex-col justify-center items-center gap-5 text-2xl opacity-60">
+        <div className="mt-16 flex flex-col justify-center items-center gap-5 text-xl opacity-60">
           <FaRegStickyNote className="text-7xl text-gray-300" />
           <h2>Notes you add appear here</h2>
         </div>
