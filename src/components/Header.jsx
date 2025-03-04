@@ -35,7 +35,7 @@ const Header = () => {
   }, [searchValue, navigate]);
 
   return (
-    <header className=" w-full fixed z-50 top-0 right-0 left-0 h-16 pl-[80px] ms:pl-24 pr-2 sm:pr-5 py-2 bg-white flex items-center justify-betwee gap-2 sm:gap-5">
+    <header className=" w-full fixed z-50 top-0 right-0 left-0 h-16 pl-[80px] sm:pl-24 pr-2 sm:pr-5 py-2 bg-white flex items-center justify-betwee gap-2 sm:gap-5">
       {/* <MdCircle className="text-3xl text-yellow-500" /> */}
       <h2 className="sm:block hidden font-medium text-lg min-w-44 text-black">
         {tagValue
