@@ -7,9 +7,9 @@ import { PiTagSimpleBold, PiTagSimple, PiNotepadBold } from "react-icons/pi";
 import { useNotes } from "../context/GlobalContext";
 
 const SideMenu = () => {
-  const { uniqueTags } = useNotes();
+  const { uniqueTags, notes } = useNotes();
 
-  const [isOpen, setIsOpen] = useState(false); // Manage the side menu open state
+  const [isOpen, setIsOpen] = useState(true); // Manage the side menu open state
   const [searchParams, setSearchParams] = useSearchParams(); // Manage query params
   const navigate = useNavigate();
 
@@ -26,60 +26,40 @@ const SideMenu = () => {
     navigate(`/?${params.toString()}`, { replace: true }); // Update URL without reloading
   };
 
+  const tags = uniqueTags.map(tag => (
+    <li
+      key={tag} // safer key to avoid React warning
+      className={`flex px-10 py-4 justify-between items-center 
+          rounded-full  cursor-pointer overflow-hidden border border-black
+          ${tagValue === tag ? "bg-[#000000] text-white" : "bg-transparent hover:bg-slate-200"} duration-200`}
+      onClick={() => handleTagClick(tag)}
+    >
+      <p className={`font-medium whitespace-nowrap ${isOpen ? "block" : "hidden"}`}>
+        {tag.charAt(0).toUpperCase() + tag.slice(1)}
+      </p>
+    </li>
+  ));
+
+
   return (
     <>
-      {isOpen &&
-        <div
-          className="absolute inset-0 z-50"
-          onClick={() => setIsOpen(false)}
-        >
-        </div>
-      }
       <div
-        className={`custom-scrollbar px-3 py-2 pb-10 bg-white border fixed bottom-0 top-0 z-50 overflow-hidden
-        ${isOpen ? "w-60 shadow-2xl overflow-y-auto" : "w-[72px]"} duration-300`}
-        onMouseEnter={() => setIsOpen(true)} // Show side menu on mouse enter
-        onMouseLeave={() => setIsOpen(false)} // Hide side menu on mouse leave
+        className={`custom-scrollbar absolute top-20 left-2 right-2 bottom-0 py-2 overflow-y-scroll`}
       >
-        <ul className="flex flex-col justify-center items-start gap-2">
-          <li className="flex my-2 justify-center w-full">
-            <MdCircle className="text-3xl text-[#FF7900]" />
-          </li>
+        <ul className="flex flex-wrap justify-center gap-1">
 
-          {/* "Notes" button */}
+          {/* "All" button */}
           <li
-            className={`p-3 rounded-xl cursor-default ${!tagValue ? "bg-[#80CEE1] text-white" : "hover:bg-slate-200"} 
-            ${isOpen ? "w-full" : "w-12"} cursor-pointer overflow-hidden duration-300`}
+            className={`px-10 py-4 flex items-center  rounded-full border border-black cursor-default ${!tagValue ? "bg-[#000000] text-white" : "hover:bg-slate-200"} 
+             cursor-pointer overflow-hidden duration-300`}
             onClick={() => handleTagClick(null)} // Clears tag filter
           >
-            <div className="flex items-center gap-8">
-              <div>
-                <PiNotepad className="text-2xl" />
-              </div>
-              <p className={`text-sm font-medium ${isOpen ? "block" : "hidden"}`}>
-                Notes
-              </p>
-            </div>
+            <p className={` font-medium ${isOpen ? "block" : "hidden"}`}>
+              All
+            </p>
           </li>
-
           {/* Render tags */}
-          {uniqueTags.map((tag) => (
-            <li
-              key={tag}
-              className={`p-3 cursor-default rounded-xl ${tagValue === tag ? "bg-[#80CEE1] text-white" : "hover:bg-slate-200"} 
-              ${isOpen ? "w-full" : "w-12"} cursor-pointer overflow-hidden duration-300`}
-              onClick={() => handleTagClick(tag)} // Filters notes by tag
-            >
-              <div className="flex items-center gap-8">
-                <div>
-                  <PiTagSimple className="text-2xl" />
-                </div>
-                <p className={`text-sm font-medium whitespace-nowrap ${isOpen ? "block" : "hidden"}`}>
-                  {tag.charAt(0).toUpperCase() + tag.slice(1)} {/* Capitalize tag */}
-                </p>
-              </div>
-            </li>
-          ))}
+          {tags}
         </ul>
       </div>
     </>

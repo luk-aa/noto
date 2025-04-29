@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from 'react'
-import { initialNote } from '../utils/data'
+// import { initialNote } from '../utils/data'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 
 const NoteContext = createContext({})
@@ -14,8 +14,9 @@ const NoteProvider = ({ children }) => {
 
   const [takeNoteIsOpen, setTakeNoteIsOpen] = useState(false)
   const [selectedOption, setSelectedOption] = useState([]);
-  const [gridView, setGridView] = useState(true)
+  const [gridView, setGridView] = useState(false)
   const [color, setColor] = useState('#FFFFFF');
+  const [searchBarIsOpen, setSearchBarIsOpen] = useState(false)
 
   function closeTakeNote() {
     setTakeNoteIsOpen(false)
@@ -25,9 +26,8 @@ const NoteProvider = ({ children }) => {
   }
 
   //Generate unique tags from notes
-  const uniqueTags = Array.from(
-    new Set(notes.flatMap((note) => note.tags.map((tag) => tag.value.trim(""))))
-  );
+  const uniqueTags = [...new Set(notes.flatMap((note) => note.tags.map((tag) => tag.value.trim(""))))]
+
 
   //options for CreatableSelect
   const options = uniqueTags.map(tag => ({
@@ -62,19 +62,12 @@ const NoteProvider = ({ children }) => {
       prevNotes.map((prevNote) => ({ ...prevNote, isPaletteVisible: false }))
     );
   }
-  // function showPalette(id) {
-  //   setNotes((prevNotes) =>
-  //     prevNotes.map((prevNote) =>
-  //       prevNote.id === id ? { ...prevNote, isPaletteVisible: true } : prevNote
-  //     )
-  //   );
-  // }
 
-  function changeNoteColor(id, newColor) {
+  function changeNoteColor(id, textColor, backgroundColor) {
     setNotes((prevNotes) =>
       prevNotes.map((prevNote) =>
         prevNote.id === id
-          ? { ...prevNote, color: newColor }
+          ? { ...prevNote, textColor: textColor, backgroundColor: backgroundColor }
           : prevNote
       )
     );
@@ -99,6 +92,14 @@ const NoteProvider = ({ children }) => {
     );
   };
 
+  function openSearchBar() {
+    setSearchBarIsOpen(true)
+  }
+
+  function closeSearchBar() {
+    setSearchBarIsOpen(false)
+  }
+
   return (
     <NoteContext.Provider
       value={{
@@ -121,7 +122,10 @@ const NoteProvider = ({ children }) => {
         highlightText,
         showPalette,
         closePalette,
-        changeNoteColor
+        changeNoteColor,
+        openSearchBar,
+        closeSearchBar,
+        searchBarIsOpen
       }}>
       {children}
     </NoteContext.Provider>

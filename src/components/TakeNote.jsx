@@ -1,18 +1,20 @@
 import React, { useState, useRef, useEffect } from "react";
-import { nanoid } from "nanoid";
 import CreatableSelect from "react-select/creatable";
 import { customStyles } from "../utils/data";
 import NoteColor from "./NoteColor";
 import { useNotes } from "../context/GlobalContext";
 import { MdOutlineNewLabel } from "react-icons/md";
 import { MdNewLabel } from "react-icons/md";
-import { IoIosAddCircle } from "react-icons/io";
-import { FaSquarePlus } from "react-icons/fa6";
-import { BsPlusSquareFill } from "react-icons/bs";
+import { FaCircle } from "react-icons/fa6";
 import { LuPalette } from "react-icons/lu";
-import { IoArrowBackOutline } from "react-icons/io5";
-import { CiSaveDown2 } from "react-icons/ci";
+import { IoArrowBackOutline, IoClose } from "react-icons/io5";
 import { HiOutlineSave } from "react-icons/hi";
+import { getFormattedDateParts } from "../utils/dateFormat";
+import Form from "./Form";
+import TagFormat from "./TagFormat";
+import { IoMdArrowRoundDown } from "react-icons/io";
+import { FiArrowDownCircle } from "react-icons/fi";
+import { BsArrowDownCircle } from "react-icons/bs";
 
 
 const TakeNote = () => {
@@ -35,15 +37,12 @@ const TakeNote = () => {
   });
 
   // Local state to store the selected color for the note
-  const [color, setColor] = useState('#FFFFFF');
+  const [backgroundColor, setBackgroundColor] = useState('#FFFFFF');
+  const [textColor, setTextColor] = useState('#000000')
   const [paletteIsOpen, setPaletteIsOpen] = useState(false)
-
-  // Creating a reference for the textarea to dynamically adjust height
-  const textAreaRef = useRef(null);
+  const [isTagInputVisible, setIsTagInputVisible] = useState(options > 0);
 
   const tagInputRef = useRef(null);
-
-  const [isTagInputVisible, setIsTagInputVisible] = useState(options > 0);
 
   useEffect(() => {
     if (isTagInputVisible && tagInputRef.current) {
@@ -57,13 +56,6 @@ const TakeNote = () => {
     setSingleNote((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Automatically adjusts the textarea height based on its content
-  useEffect(() => {
-    if (textAreaRef.current) {
-      textAreaRef.current.style.height = "auto";  // Reset height
-      if (textAreaRef.current.scrollHeight !== 0) textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight}px`;  // Set new height based on content
-    }
-  }, [singleNote.text]); // Only re-run when the text content changes
 
 
   function handleTagChange(newTags) {
@@ -72,6 +64,7 @@ const TakeNote = () => {
       setIsTagInputVisible(false);
     }
   }
+
 
   function handleBlur() {
     if (selectedOption.length === 0) {
@@ -88,152 +81,159 @@ const TakeNote = () => {
       const newNote = {
         ...singleNote,
         tags: selectedOption,
-        id: nanoid(),
+        id: Date.now(),
         isOpen: false,
-        color: color
+        textColor: textColor,
+        backgroundColor: backgroundColor,
+        date: getFormattedDateParts()
       };
-
       // Update the notes in context with the new note
-      setNotes((prev) => [newNote, ...prev]);
+      setNotes((prev) => [...prev, newNote]);
 
       // Reset the form to its initial state after saving
       setSingleNote({ title: "", text: "" });
       setSelectedOption([]); // Reset selected tags
       closeTakeNote(false); // Close the note form
-      setColor('#FFFFFF'); // Reset color to default
-
-      // Reset textarea height back to default
-      if (textAreaRef.current) {
-        textAreaRef.current.style.height = "auto";
-      }
+      setTextColor('#000000'); // Reset color to default
+      setBackgroundColor('#FFFFFF')
     }
   };
-  console.log(takeNoteIsOpen);
 
 
   return (
     <div
-      className={` ${takeNoteIsOpen ? 'fixed sm:static z-50 sm:z-40 bg-[#202124] sm:bg-transparent bg-opacity-60' : 'block'}
-       w-full inset-0 flex items-center justify-center`}
-      onClick={() => closeTakeNote()}
+      className={`px-2 py-10  h-full bottom-0 bg-black ${takeNoteIsOpen ? 'fixed   z-50  bg-opacity-60' : 'hidden'}
+        inset-0 h-full flex items-center justify-center overflow-hidden`}
     >
-      <form
-        onSubmit={saveNote}
-        className={` sm:block box-shadow relative max-w-[600px] w-full overflow-hidden
-          ${takeNoteIsOpen ? 'block p-4 sm:pb-16 sm:p-2  sm:max-h-full h-full sm:min-h-[200px]' : 'hidden px-2 sm:block sm:h-12'}
-           border sm:rounded-lg `}
-        style={{ backgroundColor: color }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        {takeNoteIsOpen && (
-          <>
-            <div className=" flex items-center gap-2">
-              <input
-                type="text"
-                name="title"
-                value={singleNote.title}
-                onChange={textChange}
-                className="px-3 sm:px-2 py-2 text-xl sm:text-lg font-medium placeholder:text-black w-full bg-transparent rounded-lg outline-none"
-                placeholder="Title"
-              />
+      <div className="max-w-[600px]  w-full h-full relative rounded-3xl z-50 overflow-hidden">
+        <form
+          onSubmit={saveNote}
+          className={`bg-slate-500  h-full flex flex-col justify-between p-3 rounded-3xl overflow-hidden`}
+          style={{ backgroundColor: backgroundColor, color: textColor }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className={`shadow-lg absolute w-full left-0 py-5 px-3 rounded-b-3xl z-40 transition-all 
+        duration-300 ease-in-out 
+        ${isTagInputVisible ? 'top-0 opacity-100 pointer-events-auto' : '-top-20 opacity-0 pointer-events-none'}`}
+            style={{ backgroundColor: "white" }}
+          >
+            <CreatableSelect
+              isMulti
+              name="tags"
+              value={selectedOption}
+              onChange={handleTagChange}
+              onBlur={handleBlur}
+              className={` custom-scrollbar`}
+              styles={customStyles}
+              placeholder="Tags..."
+              options={options}
+              ref={tagInputRef}
+            />
+          </div>
+          <div>
+            <FaCircle />
+          </div>
+          <Form
+            titleValue={singleNote.title}
+            textValue={singleNote.text}
+            textColor={textColor}
+            handleTextChange={textChange}
+          />
+          <div className=" pt-3 flex gap-2 flex-wrap">
+            <TagFormat
+              selectedOption={selectedOption}
+              borderColor={textColor}
+              isNote={true} />
+          </div>
+          {/* Menu Starts */}
+
+          <div className=" p-2 flex justify-between items-center rounded-md">
+            <div className=" flex items-center gap-8">
+              <button
+                type="submit"
+                disabled={!(singleNote.title.trim() || singleNote.text.trim())} // Disable button if both title and text are empty
+                className={` ${(singleNote?.title?.trim() || singleNote?.text?.trim()) ? 'opacity-100 cursor-pointer' : 'opacity-20'} `}
+              >
+                <FiArrowDownCircle className="text-[34px]" />
+              </button>
+              <div
+                className="cursor-pointer"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setPaletteIsOpen(!paletteIsOpen)
+                }}>
+                <LuPalette className="text-3xl" />
+              </div>
               <div
                 className={` cursor-pointer`}
               >
                 {!isTagInputVisible
-                  ? <MdOutlineNewLabel className="text-3xl sm:text-2xl" onClick={() => setIsTagInputVisible(true)} />
-                  : <MdNewLabel className={`text-3xl sm:text-2xl ${isTagInputVisible ? 'opacity-100' : 'opacity-0'} duration-200`} onClick={() => setIsTagInputVisible(false)} />}
+                  ? <MdOutlineNewLabel
+                    className="text-4xl"
+                    onClick={() => setIsTagInputVisible(true)}
+                  />
+                  : <MdNewLabel
+                    className={`text-4xl ${isTagInputVisible ? 'opacity-100' : 'opacity-0'} duration-200`}
+                    onClick={() => setIsTagInputVisible(false)}
+                  />
+                }
 
               </div>
             </div>
-
-            {isTagInputVisible && (
-              <CreatableSelect
-                isMulti
-                name="tags"
-                value={selectedOption}
-                onChange={handleTagChange}
-                onBlur={handleBlur}
-                className="w-fit min-w-[300px] ml-1 sm:ml-0"
-                styles={customStyles}
-                placeholder="Tags..."
-                options={options}
-                ref={tagInputRef}
-              />
-            )}
-          </>
-        )}
-
-        {/* Textarea for Note Text */}
-        <textarea
-          name="text"
-          ref={textAreaRef}
-          className={`custom-scrollbar scrollbar-thin scrollbar-thumb-gray-300 
-            w-full pt-3 pb-3 max-h-[340px] px-3 sm:px-2 
-            rounded-lg outline-none resize-none
-          bg-transparent placeholder-black 
-          ${takeNoteIsOpen ? "sm:text-sm" : "text-base font-medium overflow-hidden"}`}
-          placeholder="Collect your thoughts..."
-          value={singleNote.text}
-          onChange={textChange}
-          rows="1"
-          onClick={() => openTakeNote()}
-        />
-        <div
-          className={`sm:hidden absolute inset-0 z-40 bg-[#3c404380] ${paletteIsOpen ? 'block' : 'hidden'} `}
-          onClick={() => setPaletteIsOpen(false)}
-        >
-        </div>
-        <div
-          className={`sm:hidden box-shadow absolute bottom-0 left-0 z-50 px-2 py-4 w-full  rounded-t-3xl bg-white
-              ${paletteIsOpen ? 'translate-y-0' : 'translate-y-full'} duration-200`}
-          onClick={(e) => e.stopPropagation()}
-          style={{ backgroundColor: color }}
-        >
-          <NoteColor color={color} setColor={setColor} circleSize={'48px'} />
-        </div>
-
-        {/* Show Save Button and Color Picker only if form is open */}
-        {takeNoteIsOpen && (
-          <div className="absolute bottom-0 left-2 right-2 flex justify-between 
-          items-center py-5 sm:py-3  px-3 gap-2">
-            <div className="sm:hidden flex items-center gap-8">
-              <div onClick={closeTakeNote}>
-                <IoArrowBackOutline className='text-3xl' />
-              </div>
-              <div onClick={(e) => {
-                e.stopPropagation()
-                setPaletteIsOpen(!paletteIsOpen)
-              }}>
-                <LuPalette className="text-3xl" />
-              </div>
-            </div>
-            <div className="hidden sm:block">
-              <NoteColor color={color} setColor={setColor} circleSize={'32px'} />
-            </div>
-
-            {/* Save Button */}
-            <button
-              type="submit"
-              disabled={!(singleNote.title.trim() || singleNote.text.trim())} // Disable button if both title and text are empty
-              className={`${(singleNote?.title?.trim() || singleNote?.text?.trim()) ? 'opacity-100 cursor-pointer' : 'opacity-20'}`}
+            <div
+              className="cursor-pointer"
+              onClick={closeTakeNote}
             >
-              <HiOutlineSave className='text-3xl sm:text-2xl' />
-            </button>
+              <IoClose className='text-4xl bg-slat-200' />
+            </div>
+            {/* {!isTagInputVisible
+              ? <MdOutlineNewLabel
+                className="text-4xl sm:text-2xl"
+                onClick={() => setIsTagInputVisible(true)}
+              />
+              : <MdNewLabel
+                className={`text-4xl sm:text-2xl ${isTagInputVisible ? 'opacity-100' : 'opacity-0'} duration-200`}
+                onClick={() => setIsTagInputVisible(false)}
+              />
+            } */}
+            {/* <div className="hidden sm:block">
+              <NoteColor
+                textColor={textColor}
+                setTextColor={setTextColor}
+                backgroundColor={backgroundColor}
+                setBackgroundColor={setBackgroundColor}
+                circleSize={'32px'} />
+            </div> */}
+
           </div>
-        )}
-      </form>
-      {!takeNoteIsOpen &&
-        <button
-          className="sm:hidden bg-white rounded-lg  fixed bottom-8 right-5 z-50"
-          onClick={(e) => {
-            e.stopPropagation(); // Prevents `closeTakeNote` from being triggered
-            openTakeNote();
-          }}
-        >
-          <BsPlusSquareFill
-            className="text-5xl rounded-lg text-blue-400 box-shadow" />
-        </button>
-      }
+        </form>
+      </div>
+
+      <div
+        className={`absolute inset-0 bg-black z-50 transition-opacity duration-500 
+            ${paletteIsOpen ? 'opacity-40 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+        onClick={(e) => {
+          e.stopPropagation()
+          setPaletteIsOpen(false)
+        }}
+      >
+      </div>
+
+      <div
+        className={` box-shadow absolute bottom-0 left-0 z-50 flex justify-between items-center px-2 sm:px-5 py-4 w-full  rounded-t-3xl bg-white
+          ${paletteIsOpen ? 'translate-y-0' : 'translate-y-full'} duration-200`}
+        onClick={(e) => e.stopPropagation()}
+        style={{ backgroundColor: backgroundColor }}
+      >
+        <NoteColor
+          textColor={textColor}
+          setTextColor={setTextColor}
+          backgroundColor={backgroundColor}
+          setBackgroundColor={setBackgroundColor}
+          circleSize={'48px'}
+        />
+        <p className="hidden sm:block" style={{ color: textColor }}>"There's a reason we don't see the world in black and white." - Celerie Kemble</p>
+      </div>
     </div >
   );
 };

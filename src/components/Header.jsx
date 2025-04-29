@@ -6,6 +6,10 @@ import { CiGrid2H, CiGrid41 } from "react-icons/ci";
 import { IoMdSearch } from "react-icons/io";
 import { MdCircle } from "react-icons/md";
 import { useNotes } from "../context/GlobalContext";
+import rows from '../assets/Rows.svg'
+import grid from '../assets/Grid.svg'
+import Search from "./Search";
+import { useHideOnScroll } from "../hooks/useHideOnScroll";
 
 
 const Header = () => {
@@ -34,32 +38,29 @@ const Header = () => {
     return () => clearTimeout(delayDebounce);
   }, [searchValue, navigate]);
 
+  const isHidden = useHideOnScroll(200); // you can adjust offset if needed
+
   return (
-    <header className=" w-full fixed z-50 top-0 right-0 left-0 h-16 pl-[80px] sm:pl-24 pr-2 sm:pr-5 py-2 bg-white flex items-center justify-betwee gap-2 sm:gap-5">
-      {/* <MdCircle className="text-3xl text-yellow-500" /> */}
-      <h2 className="sm:block hidden font-medium text-lg min-w-44 text-black">
-        {tagValue
+    <header
+      className={`fixed left-0 right-0 z-40 pl-5  bg-white 
+     flex items-center justify-betwee gap-2 
+    ${isHidden ? '-top-20' : 'top-0'} ${window.scrollY > 5 ? 'mt-2 mx-4 h-14 text-2xl opacity-90 box-shadow-around rounded-full' : 'h-16 text-3xl'} duration-200`}>
+      <h1 className="header-title font-semibold  text-black">
+        {tagValue && tagValue !== 'all'
           ? (tagValue.length > 12
             ? tagValue.toUpperCase().slice(0, 12) + "..."
-            : tagValue.toUpperCase()
+            : tagValue[0].toUpperCase() + tagValue.slice(1)
           )
-          : 'QUICK THOUGHTS'}
-      </h2>
-      <div className=" px-5 flex items-center gap-5 bg-[#f1f3f4] rounded-lg w-full h-full">
-        <IoMdSearch className="text-3xl sm:text-2xl text-gray-500" />
-        <input
-          type="text"
-          value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
-          className="bg-[#f1f3f4] rounded-lg w-full h-full outline-none"
-          placeholder="Search"
-        />
-      </div>
+          : 'Noto'}
+      </h1>
+      {/* <Search /> */}
       <div
-        className=" absolute sm:static right-5 sm:hover:bg-gray-200 sm:p-3 rounded-full cursor-pointer"
+        className=" absolute  right-5 sm:hover:bg-gray-200 sm:p-3 rounded-full cursor-pointer"
         onClick={() => setGridView(!gridView)}
       >
-        {gridView ? <CiGrid2H className="text-3xl text-gray-500 sm:text-black" /> : <CiGrid41 className="text-3xl text-gray-500 sm:text-black" />}
+        {gridView
+          ? <img src={rows} alt="rows-icon" className={`${window.scrollY > 5 ? 'w-6 h-6' : 'w-7 h-7'} duration-200`} />
+          : <img src={grid} alt="grid-icon" className={`${window.scrollY > 5 ? 'w-6 h-6' : 'w-7 h-7'} duration-200`} />}
       </div>
     </header>
   );
