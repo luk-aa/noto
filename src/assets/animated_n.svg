@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<svg baseProfile="tiny" height="150" version="1.2" width="150" xmlns="http://www.w3.org/2000/svg" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xlink="http://www.w3.org/1999/xlink"><defs /><path d="M30,120 L30,30 C30,30 80,10 80,120 L80,30" fill="none" stroke="#000" stroke-dasharray="300" stroke-dashoffset="300" stroke-linecap="round" stroke-width="6"><animate attributeName="stroke-dashoffset" dur="2s" fill="freeze" from="300" repeatCount="1" to="0" /></path></svg>
