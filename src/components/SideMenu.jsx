@@ -44,7 +44,7 @@ const SideMenu = () => {
   return (
     <>
       <div
-        className={`custom-scrollbar absolute top-20 left-2 right-2 bottom-0 py-2 overflow-y-scroll`}
+        className={`custom-scrollbar absolute top-[72px] left-2 right-2 bottom-0 py-2 overflow-y-scroll`}
       >
         <ul className="flex flex-wrap justify-center gap-1">
 

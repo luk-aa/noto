@@ -15,6 +15,7 @@ import TagFormat from "./TagFormat";
 import { IoMdArrowRoundDown } from "react-icons/io";
 import { FiArrowDownCircle } from "react-icons/fi";
 import { BsArrowDownCircle } from "react-icons/bs";
+import TagInput from "./TagInput";
 
 
 const TakeNote = () => {
@@ -24,7 +25,6 @@ const TakeNote = () => {
     setNotes,
     options,
     takeNoteIsOpen,
-    openTakeNote,
     closeTakeNote,
     selectedOption,
     setSelectedOption
@@ -43,6 +43,7 @@ const TakeNote = () => {
   const [isTagInputVisible, setIsTagInputVisible] = useState(options > 0);
 
   const tagInputRef = useRef(null);
+  const textInputRef = useRef()
 
   useEffect(() => {
     if (isTagInputVisible && tagInputRef.current) {
@@ -50,27 +51,15 @@ const TakeNote = () => {
     }
   }, [isTagInputVisible]);
 
+  useEffect(() => {
+    if (takeNoteIsOpen) textInputRef.current.focus()
+  }, [takeNoteIsOpen])
+
   // Handles text change for title and text input
   const textChange = (e) => {
     const { name, value } = e.target;
     setSingleNote((prev) => ({ ...prev, [name]: value }));
   };
-
-
-
-  function handleTagChange(newTags) {
-    setSelectedOption(newTags || []);
-    if (!newTags || newTags.length === 0) {
-      setIsTagInputVisible(false);
-    }
-  }
-
-
-  function handleBlur() {
-    if (selectedOption.length === 0) {
-      setIsTagInputVisible(false);
-    }
-  }
 
   // Handles the note save process
   const saveNote = (e) => {
@@ -112,24 +101,11 @@ const TakeNote = () => {
           style={{ backgroundColor: backgroundColor, color: textColor }}
           onClick={(e) => e.stopPropagation()}
         >
-          <div className={`shadow-lg absolute w-full left-0 py-5 px-3 rounded-b-3xl z-40 transition-all 
-        duration-300 ease-in-out 
-        ${isTagInputVisible ? 'top-0 opacity-100 pointer-events-auto' : '-top-20 opacity-0 pointer-events-none'}`}
-            style={{ backgroundColor: "white" }}
-          >
-            <CreatableSelect
-              isMulti
-              name="tags"
-              value={selectedOption}
-              onChange={handleTagChange}
-              onBlur={handleBlur}
-              className={` custom-scrollbar`}
-              styles={customStyles}
-              placeholder="Tags..."
-              options={options}
-              ref={tagInputRef}
-            />
-          </div>
+          <TagInput
+            isTagVisible={isTagInputVisible}
+            setTagVisible={setIsTagInputVisible}
+            inputRef={tagInputRef}
+          />
           <div>
             <FaCircle />
           </div>
@@ -138,6 +114,7 @@ const TakeNote = () => {
             textValue={singleNote.text}
             textColor={textColor}
             handleTextChange={textChange}
+            textInputRef={textInputRef}
           />
           <div className=" pt-3 flex gap-2 flex-wrap">
             <TagFormat
@@ -145,6 +122,7 @@ const TakeNote = () => {
               borderColor={textColor}
               isNote={true} />
           </div>
+
           {/* Menu Starts */}
 
           <div className=" p-2 flex justify-between items-center rounded-md">
@@ -186,25 +164,6 @@ const TakeNote = () => {
             >
               <IoClose className='text-4xl bg-slat-200' />
             </div>
-            {/* {!isTagInputVisible
-              ? <MdOutlineNewLabel
-                className="text-4xl sm:text-2xl"
-                onClick={() => setIsTagInputVisible(true)}
-              />
-              : <MdNewLabel
-                className={`text-4xl sm:text-2xl ${isTagInputVisible ? 'opacity-100' : 'opacity-0'} duration-200`}
-                onClick={() => setIsTagInputVisible(false)}
-              />
-            } */}
-            {/* <div className="hidden sm:block">
-              <NoteColor
-                textColor={textColor}
-                setTextColor={setTextColor}
-                backgroundColor={backgroundColor}
-                setBackgroundColor={setBackgroundColor}
-                circleSize={'32px'} />
-            </div> */}
-
           </div>
         </form>
       </div>

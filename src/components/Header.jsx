@@ -10,6 +10,7 @@ import rows from '../assets/Rows.svg'
 import grid from '../assets/Grid.svg'
 import Search from "./Search";
 import { useHideOnScroll } from "../hooks/useHideOnScroll";
+import n from '../assets/letter-n.svg'
 
 
 const Header = () => {
@@ -43,17 +44,19 @@ const Header = () => {
   return (
     <header
       className={`fixed left-0 right-0 z-40 pl-5  bg-white 
-     flex items-center justify-betwee gap-2 
+     flex items-center justify-betwee 
     ${isHidden ? '-top-20' : 'top-0'} ${window.scrollY > 5 ? 'mt-2 mx-4 h-14 text-2xl opacity-90 box-shadow-around rounded-full' : 'h-16 text-3xl'} duration-200`}>
+      {!tagValue &&
+        <img src={n} alt="n-icon" className={`${window.scrollY > 5 ? 'w-5 h-5' : 'w-6 h-6'} duration-200`} />
+      }
       <h1 className="header-title font-semibold  text-black">
         {tagValue && tagValue !== 'all'
           ? (tagValue.length > 12
             ? tagValue.toUpperCase().slice(0, 12) + "..."
             : tagValue[0].toUpperCase() + tagValue.slice(1)
           )
-          : 'Noto'}
+          : 'oto'}
       </h1>
-      {/* <Search /> */}
       <div
         className=" absolute  right-5 sm:hover:bg-gray-200 sm:p-3 rounded-full cursor-pointer"
         onClick={() => setGridView(!gridView)}

@@ -35,10 +35,10 @@ const NavBar = () => {
           ${isOpen ? 'opacity-40 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
         onClick={() => setIsOpen(false)}
       ></div>
-      <div className={` flex fixed bottom-0 left-0 right-0 ${isOpen ? 'h-[400px]' : 'h-20'} z-40 duration-200 ease-in-out `}>
+      <div className={`flex fixed bottom-0 left-0 right-0 ${isOpen ? 'h-[400px]' : 'h-[72px]'} z-40 duration-200 ease-in-out `}>
         <div
           className={`box-shadow-around w-16 h-16 absolute z-50 rounded-full flex items-center 
-      justify-center bg-white ${isOpen ? 'bottom-[368px]' : 'bottom-12'} right-1/2 translate-x-1/2 duration-200 ease-in-out`}
+      justify-center bg-white ${isOpen ? 'bottom-[368px]' : 'bottom-10'} right-1/2 translate-x-1/2 duration-200 ease-in-out`}
           onClick={(e) => {
             e.stopPropagation(); // Prevents `closeTakeNote` from being triggered
             openTakeNote();
@@ -57,7 +57,6 @@ const NavBar = () => {
           <HiMenuAlt4 />
         </div>
         <SideMenu />
-        {/* <Search /> */}
       </div>
       <Search inputRef={inputRef} />
     </>

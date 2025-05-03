@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Form = ({ day, month, year, titleValue, textValue, textColor, handleTextChange }) => {
+const Form = ({ day, month, year, titleValue, textValue, textColor, handleTextChange, textInputRef }) => {
   return (
     <>
       <div className=" pt-5 pb-2  flex items-center gap-2">
@@ -26,6 +26,7 @@ const Form = ({ day, month, year, titleValue, textValue, textColor, handleTextCh
 
       <div className=" h-full">
         <textarea
+          ref={textInputRef}
           name="text"
           className="custom-scrollbar w-full h-full 
               bg-transparent resize-none   focus:outline-none 

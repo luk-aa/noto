@@ -1,16 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Note from "./Note";
-import { FaRegStickyNote } from "react-icons/fa";
-import { RiDeleteBinLine } from "react-icons/ri";
 import { useSearchParams } from "react-router-dom";
-import { LuPalette } from "react-icons/lu";
 import { useNotes } from "../context/GlobalContext";
-import NoteColor from "./NoteColor";
 import { FaCircle } from "react-icons/fa";
 import TagFormat from "./TagFormat";
 import cactus from '../assets/cactus.png'
-import notebook from '../assets/notebook.png'
-import notes from '../assets/notes.png'
 import note from '../assets/notes.png'
 
 
@@ -94,7 +88,7 @@ const NoteList = () => {
             <h1 className={`clamp-1 text-3xl font-medium ${gridView ? '' : 'whitespace-nowrap'}`}>
               {highlightText(getTitlePreview(note), searchFilter)}
             </h1>
-            <span className={` items-center font-semibold ${gridView ? 'rotate-90 sm:rotate-0 text-[10px] sm:text-3xl absolute sm:static top-10 -right-6 flex gap-1 sm:gap-2' : 'flex gap-2 text-3xl '}`}>
+            <span className={`items-center font-semibold ${gridView ? 'w-20 rotate-90 sm:rotate-0 text-[10px] sm:text-3xl absolute sm:static top-[52px] -right-8 flex gap-1 sm:gap-2' : 'flex gap-2 text-3xl '}`}>
               {note.date?.day}
               <div className={`flex flex-co ${gridView ? 'gap-1 sm:gap-0 flex-row sm:flex-col  text-[10px] sm:text-xs' : 'text-xs flex-col'}`}>
                 <span>{note.date?.month}</span>
@@ -106,30 +100,6 @@ const NoteList = () => {
         <p className="clamp-5 text-sm mt-2 tracking-[.014em] font-normal leading-5">
           {highlightText(note.text, searchFilter)}
         </p>
-        {/* <div className={`hidden mt-2 sm:flex justify-between items-center duration-300 ease-in ${isMenuVisible === note.id ? "opacity-100" : "opacity-0"}`}>
-          <div className="w-full flex justify-between gap-2" onClick={(e) => e.stopPropagation()}>
-            <div
-              onClick={() => showPalette(note.id)}
-              className="p-2 text-[#3c4043] hover:bg-[#3c404320] rounded-full cursor-pointer"
-            >
-              <LuPalette className="text-md " />
-            </div>
-            <div
-              className="p-2 text-[#3c4043] hover:bg-[#3c404320] rounded-full cursor-pointer"
-              onClick={() => deleteNote(note.id)} // Delete note on click
-            >
-              <RiDeleteBinLine className="text-md " />
-            </div>
-          </div>
-        </div> */}
-        {/* {note.isPaletteVisible && (
-          <div onClick={(e) => e.stopPropagation()}
-            className="bg-gray- box-shadow absolute -bottom-20 left-1/2 -translate-x-1/2 border rounded-lg w-[300px] p-2 z-50"
-            style={{ backgroundColor: note.color }}
-          >
-            <NoteColor color={note.color} setColor={(newColor) => changeNoteColor(note.id, newColor)} circleSize={'32px'} />
-          </div>
-        )} */}
       </div>
       {note.isOpen && (
         <Note
@@ -146,7 +116,7 @@ const NoteList = () => {
   ));
 
   return (
-    <div className={`w-full px-2 pt-[68px] pb-[88px] ${!gridView && 'max-w-[600px] m-auto'}`}>
+    <div className={`w-full px-2 pt-[68px] pb-[80px] ${!gridView && 'max-w-[600px] m-auto'}`}>
       {/* If no matching notes are found */}
       {displayedNotes.length === 0 && notes.length > 0 && (
         <div className=" flex flex-col items-center gap-2 mt-16">

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useInView } from 'framer-motion';
 import { ImTextColor } from "react-icons/im";
+import n from '../../assets/letter-n.svg'
 
 export default function Preloader() {
   const [showLoader, setShowLoader] = useState(true);
@@ -23,7 +24,16 @@ export default function Preloader() {
   return (
     showLoader && (
       <div className={`preloader-wrap ${isLoded === true ? "loaded" : ""}`}>
-        <h1
+        <motion.img
+          src={n}
+          alt="N"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1 }}
+          className="w-24 h-24 mx-auto"
+        />
+
+        {/* <h1
           className="header-title text-center text-5xl font-bold tracking-tighter md:text-6xl md:leading-[4rem]"
         >
           {text.split('').map((letter, index) => (
@@ -38,7 +48,7 @@ export default function Preloader() {
               </span>
             </motion.span>
           ))}
-        </h1>
+        </h1> */}
       </div>
     )
   );
