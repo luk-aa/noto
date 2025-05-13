@@ -1,4 +1,4 @@
-
+![Image](https://github.com/user-attachments/assets/b2d3460a-0833-49b9-a186-16f1a4b1a0cd)
 # Noto
 
 Noto is a minimalist note-taking app built for simplicity and ease of use. No clutter, no distractions — just a clean, intuitive space to capture your thoughts, tasks, and ideas effortlessly. Whether you're taking quick notes or organizing daily to-dos, Noto helps you stay focused on what matters.
